@@ -127,3 +127,5 @@ function _zcl::main()
 
   return 0
 }
+
+_zcl::main $*
