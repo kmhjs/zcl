@@ -11,6 +11,12 @@ list array by following user specified keys order.
 After load task, this plugin calls user specified function with generated
 arguments list.
 
+# Usage
+
+1. Clone this project. (Or download `zcl` file)
+2. Update your `FPATH` with path to zcl file.
+3. Call `autoload -Uz zcl` in `.zshrc` etc.
+
 # Format
 
 Here, configuration file format is defined.
