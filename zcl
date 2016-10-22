@@ -2,7 +2,7 @@
 # ZCL : ZSH configuration loader
 #
 
-function _zcl_help()
+function _zcl::help()
 {
   local usage_message='zcl [--help] [configuration file path] [mapping function name] [key ...]'
 
@@ -45,11 +45,11 @@ function _zcl_help()
   echo ""
 }
 
-function zcl()
+function _zcl::main()
 {
   if [[ "${1}" == '--help' ]]
   then
-    _zcl_help
+    _zcl::help
     return 0
   fi
 
@@ -67,7 +67,7 @@ function zcl()
   then
     echo "${term_colors[red]}Error${term_colors[reset]} : File in ${term_colors[magenta]}'${config_file_path}'${term_colors[reset]} not found." 1>&2
     echo ""
-    _zcl_help --short
+    _zcl::help --short
 
     return 1
   fi
@@ -76,7 +76,7 @@ function zcl()
   then
     echo "${term_colors[red]}Error${term_colors[reset]} : Function ${term_colors[magenta]}'${task_function}'${term_colors[reset]} not found." 1>&2
     echo ""
-    _zcl_help --short
+    _zcl::help --short
 
     return 1
   fi
@@ -86,7 +86,7 @@ function zcl()
   then
     echo "${term_colors[red]}Error${term_colors[reset]} : Insufficient key values for mapping were given." 1>&2
     echo ""
-    _zcl_help --short
+    _zcl::help --short
 
     return 1
   fi
@@ -116,7 +116,7 @@ function zcl()
       then
         echo "${term_colors[red]}Error${term_colors[reset]} : No values were mapped" 1>&2
         echo ""
-        _zcl_help --short
+        _zcl::help --short
 
         return 1
       fi
@@ -127,3 +127,5 @@ function zcl()
 
   return 0
 }
+
+_zcl::main $*
