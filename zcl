@@ -125,6 +125,11 @@ function _zcl::main()
 
       # Run task
       ${task_function} ${mapped_args}
+      local -i exit_code=$?
+      if [[ ${exit_code} != 0 ]]
+      then
+        return ${exit_code}
+      fi
     done
 
   return 0
