@@ -94,10 +94,12 @@ function _zcl::main()
   #
   # Run mapping
   #
+  local line_break=$'\\\x0A'
   cat $1 |\
-    sed 's/  */ /g;s/  *$//g;s/^)$/)@/g' |\
-    tr -d '\n' |\
-    tr '@' '\n' |\
+    sed 's!  *! !g;s!^ *) *$!#@)@#!' | \
+    tr -d '\n' | \
+    sed 's!#@)@#!)'${line_break}'!g' | \
+    sed '/^$/d' | \
     while read config
     do
       # Each lines will be evaluated as associated array
