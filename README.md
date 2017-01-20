@@ -83,6 +83,11 @@ After run this line, user will get following output.
 { "name": "plugin_3", "repository url": "http://example.com/repo3" }
 ```
 
+# Note
+
+If your function, which called by `zcl`, returned `0` as exit code, `zcl` will
+stop at that point without any error message.
+
 # License
 
 This project is distributed under MIT License. See `LICENSE` .
