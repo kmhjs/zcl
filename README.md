@@ -83,6 +83,12 @@ After run this line, user will get following output.
 { "name": "plugin_3", "repository url": "http://example.com/repo3" }
 ```
 
+# Install with Antigen
+
+```
+antigen bundle kmhjs/zcl
+```
+
 # Note
 
 If your function, which called by `zcl`, returned `0` as exit code, `zcl` will
