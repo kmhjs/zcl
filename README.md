@@ -23,16 +23,21 @@ Here, configuration file format is defined.
 Configuration file is shell-style associated array as follows.
 
 ```shell
+# First plugin
 (
   :name              plugin_1
   :url               http://example.com/repo1
   :install_directory /home/owner/path1
 )
+
+# Second plugin for utility
 (
   :name              plugin_2
   :url               http://example.com/repo2
   :install_directory /home/owner/path2
 )
+
+# Third plugin
 (
   :name              plugin_3
   :url               http://example.com/repo3
