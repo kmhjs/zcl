@@ -96,7 +96,7 @@ function _zcl::main()
   #
   local line_break=$'\\\x0A'
   cat $1 | \
-    sed '/^[ ]*#.*$/d' | \
+    sed '/^[[:blank:]]*#.*$/d' | \
     sed 's!  *! !g;s!^ *) *$!#@)@#!' | \
     tr -d '\n' | \
     sed 's!#@)@#!)'${line_break}'!g' | \
