@@ -95,7 +95,8 @@ function _zcl::main()
   # Run mapping
   #
   local line_break=$'\\\x0A'
-  cat $1 |\
+  cat $1 | \
+    sed '/^[ ]*#.*$/d' | \
     sed 's!  *! !g;s!^ *) *$!#@)@#!' | \
     tr -d '\n' | \
     sed 's!#@)@#!)'${line_break}'!g' | \
