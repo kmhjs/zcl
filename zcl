@@ -2,138 +2,141 @@
 # ZCL : ZSH configuration loader
 #
 
-function _zcl::help()
+function zcl()
 {
-  local usage_message='zcl [--help] [configuration file path] [mapping function name] [key ...]'
+  function _zcl::help()
+  {
+    local usage_message='zcl [--help] [configuration file path] [mapping function name] [key ...]'
 
-  # If --short option was given, just show usage
-  if [[ "${1}" == '--short' ]]
-  then
-    echo "Usage : ${usage_message}"
+    # If --short option was given, just show usage
+    if [[ "${1}" == '--short' ]]
+    then
+      echo "Usage : ${usage_message}"
 
-    return 0
-  fi
+      return 0
+    fi
 
-  # Color definition is for remove dependency of colors native module.
-  local -A term_colors=(red '\e[1;31m' green '\e[1;32m' magenta '\e[1;35m' cyan '\e[1;36m' reset '\e[0;0m')
+    # Color definition is for remove dependency of colors native module.
+    local -A term_colors=(red '\e[1;31m' green '\e[1;32m' magenta '\e[1;35m' cyan '\e[1;36m' reset '\e[0;0m')
 
-  echo "# ${term_colors[cyan]}zcl help${term_colors[reset]}"
-  echo ""
-
-  echo "${term_colors[green]}NAME${term_colors[reset]}"
-  echo "    zcl -- zsh configuration loader"
-  echo ""
-
-  echo "${term_colors[green]}SYNOPSIS${term_colors[reset]}"
-  echo "    zcl ${usage_message}"
-  echo ""
-
-  echo "${term_colors[green]}DESCRIPTION${term_colors[reset]}"
-  echo "    configuration file path"
-  echo "        Path to configuration file."
-  echo "        e.g.) ${term_colors[magenta]}./configuration${term_colors[reset]}"
-  echo ""
-  echo "    mapping function name"
-  echo "        Defined function name."
-  echo "        e.g.) ${term_colors[magenta]}to_json_format${term_colors[reset]}"
-  echo ""
-  echo "    key ..."
-  echo "        Defined key values."
-  echo "        zcl follows given parameters order."
-  echo "        zcl does not remove the duplicated key(s)."
-  echo "        e.g.) ${term_colors[magenta]}:name :url${term_colors[reset]}"
-  echo ""
-}
-
-function _zcl::main()
-{
-  if [[ "${1}" == '--help' ]]
-  then
-    _zcl::help
-    return 0
-  fi
-
-  local config_file_path=${1}
-  local task_function=${2}
-  local rest_args=(${*[3,-1]})
-
-  # Color definition is for remove dependency of colors native module.
-  local -A term_colors=(red '\e[1;31m' magenta '\e[1;35m' reset '\e[0;0m')
-
-  #
-  # Validates args
-  #
-  if [[ ! -e ${config_file_path} ]]
-  then
-    echo "${term_colors[red]}Error${term_colors[reset]} : File in ${term_colors[magenta]}'${config_file_path}'${term_colors[reset]} not found." 1>&2
+    echo "# ${term_colors[cyan]}zcl help${term_colors[reset]}"
     echo ""
-    _zcl::help --short
 
-    return 1
-  fi
-
-  if ! which ${task_function} 1>/dev/null
-  then
-    echo "${term_colors[red]}Error${term_colors[reset]} : Function ${term_colors[magenta]}'${task_function}'${term_colors[reset]} not found." 1>&2
+    echo "${term_colors[green]}NAME${term_colors[reset]}"
+    echo "    zcl -- zsh configuration loader"
     echo ""
-    _zcl::help --short
 
-    return 1
-  fi
-
-  # If arg 3..N (key value of mappings) is not given, return.
-  if (( ${#rest_args} < 1 ))
-  then
-    echo "${term_colors[red]}Error${term_colors[reset]} : Insufficient key values for mapping were given." 1>&2
+    echo "${term_colors[green]}SYNOPSIS${term_colors[reset]}"
+    echo "    zcl ${usage_message}"
     echo ""
-    _zcl::help --short
 
-    return 1
-  fi
+    echo "${term_colors[green]}DESCRIPTION${term_colors[reset]}"
+    echo "    configuration file path"
+    echo "        Path to configuration file."
+    echo "        e.g.) ${term_colors[magenta]}./configuration${term_colors[reset]}"
+    echo ""
+    echo "    mapping function name"
+    echo "        Defined function name."
+    echo "        e.g.) ${term_colors[magenta]}to_json_format${term_colors[reset]}"
+    echo ""
+    echo "    key ..."
+    echo "        Defined key values."
+    echo "        zcl follows given parameters order."
+    echo "        zcl does not remove the duplicated key(s)."
+    echo "        e.g.) ${term_colors[magenta]}:name :url${term_colors[reset]}"
+    echo ""
+  }
 
-  #
-  # Run mapping
-  #
-  local line_break=$'\\\x0A'
-  cat $1 | \
-    sed '/^[[:blank:]]*#.*$/d' | \
-    sed 's!  *! !g;s!^ *) *$!#@)@#!' | \
-    tr -d '\n' | \
-    sed 's!#@)@#!)'${line_break}'!g' | \
-    sed '/^$/d' | \
-    while read config
-    do
-      # Each lines will be evaluated as associated array
-      local -A conf_associated
-      eval "conf_associated=${config}"
+  function _zcl::main()
+  {
+    if [[ "${1}" == '--help' ]]
+    then
+      _zcl::help
+      return 0
+    fi
 
-      # Map associated array values to argument array
-      local mapped_args=()
-      for k in ${rest_args}
+    local config_file_path=${1}
+    local task_function=${2}
+    local rest_args=(${*[3,-1]})
+
+    # Color definition is for remove dependency of colors native module.
+    local -A term_colors=(red '\e[1;31m' magenta '\e[1;35m' reset '\e[0;0m')
+
+    #
+    # Validates args
+    #
+    if [[ ! -e ${config_file_path} ]]
+    then
+      echo "${term_colors[red]}Error${term_colors[reset]} : File in ${term_colors[magenta]}'${config_file_path}'${term_colors[reset]} not found." 1>&2
+      echo ""
+      _zcl::help --short
+
+      return 1
+    fi
+
+    if ! which ${task_function} 1>/dev/null
+    then
+      echo "${term_colors[red]}Error${term_colors[reset]} : Function ${term_colors[magenta]}'${task_function}'${term_colors[reset]} not found." 1>&2
+      echo ""
+      _zcl::help --short
+
+      return 1
+    fi
+
+    # If arg 3..N (key value of mappings) is not given, return.
+    if (( ${#rest_args} < 1 ))
+    then
+      echo "${term_colors[red]}Error${term_colors[reset]} : Insufficient key values for mapping were given." 1>&2
+      echo ""
+      _zcl::help --short
+
+      return 1
+    fi
+
+    #
+    # Run mapping
+    #
+    local line_break=$'\\\x0A'
+    cat $1 | \
+      sed '/^[[:blank:]]*#.*$/d' | \
+      sed 's!  *! !g;s!^ *) *$!#@)@#!' | \
+      tr -d '\n' | \
+      sed 's!#@)@#!)'${line_break}'!g' | \
+      sed '/^$/d' | \
+      while read config
       do
-        mapped_args+=(${conf_associated[${k}]})
+        # Each lines will be evaluated as associated array
+        local -A conf_associated
+        eval "conf_associated=${config}"
+
+        # Map associated array values to argument array
+        local mapped_args=()
+        for k in ${rest_args}
+        do
+          mapped_args+=(${conf_associated[${k}]})
+        done
+
+        # Validate mapped args
+        if (( ${#mapped_args} < 1 ))
+        then
+          echo "${term_colors[red]}Error${term_colors[reset]} : No values were mapped" 1>&2
+          echo ""
+          _zcl::help --short
+
+          return 1
+        fi
+
+        # Run task
+        ${task_function} ${mapped_args}
+        local -i exit_code=$?
+        if [[ ${exit_code} != 0 ]]
+        then
+          return ${exit_code}
+        fi
       done
 
-      # Validate mapped args
-      if (( ${#mapped_args} < 1 ))
-      then
-        echo "${term_colors[red]}Error${term_colors[reset]} : No values were mapped" 1>&2
-        echo ""
-        _zcl::help --short
+    return 0
+  }
 
-        return 1
-      fi
-
-      # Run task
-      ${task_function} ${mapped_args}
-      local -i exit_code=$?
-      if [[ ${exit_code} != 0 ]]
-      then
-        return ${exit_code}
-      fi
-    done
-
-  return 0
+  _zcl::main $*
 }
-
-_zcl::main $*
